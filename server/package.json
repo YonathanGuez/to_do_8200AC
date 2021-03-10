@@ -1,0 +1,7 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "server Rest API Postgress",
+  "main": "index.js",
+  "license": "MIT"
+}
