@@ -103,7 +103,6 @@ router.put('/:id', async (req, res) => {
  * DELETE Task
  * @param id
  */
-
 router.post('/:id', async (req, res) => {
   const { id } = req.query;
   try {
