@@ -1,8 +1,17 @@
 const express = require('express');
 const router = express.Router();
-const { createTask, setTask, getAllTasks } = require('../../repo/todo');
+const {
+  createTask,
+  setTask,
+  getAllTasks,
+  getTask,
+} = require('../../repo/todo');
 
-router.post('/', async (req, res) => {
+/**
+ * Create Task
+ * @param task
+ */
+router.post('/:task', async (req, res) => {
   const { task } = req.query;
   try {
     const result = await createTask(task);
@@ -21,6 +30,9 @@ router.post('/', async (req, res) => {
   }
 });
 
+/**
+ * Get All Tasks
+ */
 router.get('/', async (req, res) => {
   try {
     const result = await getAllTasks();
@@ -39,9 +51,15 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.get('/', async (req, res) => {
+/**
+ * Get Task
+ * @param id
+ */
+
+router.get('/:id', async (req, res) => {
+  const { id } = req.query;
   try {
-    const result = await getAllTasks();
+    const result = await getTask();
     if (result.rowCount == 1) {
       res.status(201).send({
         status: 'success',
@@ -56,7 +74,12 @@ router.get('/', async (req, res) => {
     console.log(error);
   }
 });
-router.post('/', async (req, res) => {
+
+/**
+ * Update Task
+ * @param id
+ */
+router.patch('/:id', async (req, res) => {
   const { id } = req.query;
   try {
     const result = await setTask(id, status);
