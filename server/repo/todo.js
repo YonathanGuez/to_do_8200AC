@@ -40,3 +40,14 @@ exports.setTask = function (status, id) {
     values: values,
   });
 };
+
+exports.deleteTask = function (id) {
+  const values = [id];
+  const query = `DELETE FROM "todo" WHERE id=$1::int;`;
+
+  return db.query({
+    name: 'deleteTask',
+    text: query,
+    values: values,
+  });
+};

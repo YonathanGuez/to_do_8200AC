@@ -5,6 +5,7 @@ const {
   setTask,
   getAllTasks,
   getTask,
+  deleteTask,
 } = require('../../repo/todo');
 
 /**
@@ -63,13 +64,13 @@ router.get('/:id', async (req, res) => {
     if (result.rowCount == 1) {
       res.status(201).send({
         status: 'success',
-        message: 'all Tasks',
+        message: 'get Task',
       });
     }
   } catch (error) {
     res.status(401).send({
       status: 'fail',
-      message: 'fail get all tasks',
+      message: 'fail get task',
     });
     console.log(error);
   }
@@ -79,14 +80,14 @@ router.get('/:id', async (req, res) => {
  * Update Task
  * @param id
  */
-router.patch('/:id', async (req, res) => {
+router.put('/:id', async (req, res) => {
   const { id } = req.query;
   try {
     const result = await setTask(id, status);
     if (result.rowCount == 1) {
       res.status(201).send({
         status: 'success',
-        message: 'task update',
+        message: 'task updated',
       });
     }
   } catch (error) {
@@ -98,4 +99,27 @@ router.patch('/:id', async (req, res) => {
   }
 });
 
+/**
+ * DELETE Task
+ * @param id
+ */
+
+router.post('/:id', async (req, res) => {
+  const { id } = req.query;
+  try {
+    const result = await deleteTask(id);
+    if (result.rowCount == 1) {
+      res.status(201).send({
+        status: 'success',
+        message: 'task deleted',
+      });
+    }
+  } catch (error) {
+    res.status(401).send({
+      status: 'fail',
+      message: 'this task not be deleted',
+    });
+    console.log(error);
+  }
+});
 module.exports = router;
