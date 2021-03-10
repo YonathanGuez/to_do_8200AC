@@ -1,0 +1,21 @@
+{
+  "name": "to_do_8200AC",
+  "version": "1.0.0",
+  "description": "fullstack exercise",
+  "main": "index.js",
+  "repository": "https://github.com/YonathanGuez/to_do_8200AC.git",
+  "author": "YO-G <yonath-g@hotmail.fr>",
+  "license": "MIT",
+  "devDependencies": {
+    "npm-run-all": "^4.1.5"
+  },
+  "scripts": {
+    "build": "cd client && npm run build",
+    "start": "node server",
+    "start:client": "cd client && npm start",
+    "start:server": "cd server && npm start",
+    "start:dev": "npm-run-all -p start:client start:server",
+    "install:dev": "npm i && cd client && npm i && cd ../server && npm i",
+    "postinstall": "cd server && npm i"
+  }
+}
