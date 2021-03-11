@@ -8,20 +8,20 @@ function AddTodo({ task, createTodo }) {
     }
   );
 
-  const handleChange = (evt) => {
-    setUserInput({ [evt.target.name]: evt.target.value });
+  const handleChange = (e) => {
+    setUserInput({ [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (evt) => {
-    evt.preventDefault();
-    const newTodo = { id: 1, task: userInput.task, completed: false };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const newTodo = { task: userInput.task };
     createTodo(newTodo);
     setUserInput({ task: '' });
   };
 
   return (
     <form className="NewTodoForm" onSubmit={handleSubmit}>
-      <label htmlFor="task">New Task</label>
+      {/* <label htmlFor="task">New Task</label> */}
       <input
         value={userInput.task}
         onChange={handleChange}

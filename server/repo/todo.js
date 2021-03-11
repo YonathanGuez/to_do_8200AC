@@ -3,8 +3,8 @@ const db = require('../db');
 exports.createTask = function (task) {
   const values = [task];
   const query = `
-  INSERT INTO "todo"(task, status,createdAt,updateAt) 
-  VALUES (($1::text), FALSE, Now(), NULL);
+  INSERT INTO "todo"(task, status, createdat, updateat) 
+  VALUES (($1::text), FALSE, Now(), NULL)  RETURNING id;
     `;
   return db.query({
     name: 'createTask',
@@ -33,7 +33,7 @@ exports.getTask = function (id) {
 
 exports.setTask = function (status, id) {
   const values = [status, id];
-  const query = `UPDATE "todo" set status=$1::text , updateAt=Now()  where id =$2::int;`;
+  const query = `UPDATE "todo" set status=$1 , updateAt=Now()  where id =$2::int;`;
   return db.query({
     name: 'setTask',
     text: query,

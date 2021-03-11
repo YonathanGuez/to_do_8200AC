@@ -1,46 +1,79 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Todo from './Todo';
 import AddTodo from './AddTodo';
+import './TodoList.css';
 
 function TodoList() {
-  const [todos, setTodos] = useState([
-    { id: 1, task: 'task 1', completed: false },
-    { id: 2, task: 'task 2', completed: true },
-  ]);
+  const [todos, setTodos] = useState([]);
 
-  const create = (newTodo) => {
-    console.log(newTodo);
-    setTodos([...todos, newTodo]);
+  const getAllTasks = async () => {
+    const url = process.env.REACT_APP_URL + '/api/client/';
+    const response = await fetch(url);
+    console.log(url);
+    if (response.ok) {
+      const json = await response.json();
+      setTodos(json.tasks);
+    } else {
+      console.log('bad request: ');
+    }
+  };
+  const create = async (newTodo) => {
+    const url = process.env.REACT_APP_URL + '/api/client/add/' + newTodo.task;
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+    });
+    if (response.ok) {
+      const json = await response.json();
+      let newtask = { id: json.id, task: newTodo.task, status: false };
+      setTodos([...todos, newtask]);
+    }
   };
 
-  const remove = (id) => {
-    setTodos(todos.filter((todo) => todo.id !== id));
+  const remove = async (key) => {
+    const url = process.env.REACT_APP_URL + '/api/client/delete/' + key;
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+    });
+    if (response.ok) {
+      getAllTasks();
+    }
   };
-
-  const update = (id, updtedTask) => {
+  const updateStatus = async (key, status) => {
+    const url = process.env.REACT_APP_URL + '/api/client/update/' + key;
+    const response = await fetch(url, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status: status }),
+    });
+    if (response.ok) {
+      // const json = await response.json();
+      // console.log(json);
+    }
+  };
+  const toggleComplete = async (key) => {
     const updatedTodos = todos.map((todo) => {
-      if (todo.id === id) {
-        return { ...todo, task: updtedTask };
+      if (todo['id'].toString() === key) {
+        console.log(key, !todo['status']);
+        updateStatus(key, !todo['status']);
+        return { ...todo, status: !todo['status'] };
       }
       return todo;
     });
     setTodos(updatedTodos);
   };
 
-  const toggleComplete = (id) => {
-    const updatedTodos = todos.map((todo) => {
-      if (todo.id === id) {
-        return { ...todo, completed: !todo.completed };
-      }
-      return todo;
-    });
-    setTodos(updatedTodos);
-  };
+  useEffect(() => {
+    async function fetchMyAPI() {
+      await getAllTasks();
+    }
+    fetchMyAPI();
+  }, []);
 
-  const todosList = todos.map((todo) => (
+  let todosList = todos.map((todo) => (
     <Todo
       toggleComplete={toggleComplete}
-      update={update}
       remove={remove}
       key={todo.id}
       todo={todo}

@@ -12,12 +12,13 @@ const {
  * Create Task
  * @param task
  */
-router.post('/:task', async (req, res) => {
-  const { task } = req.query;
+router.post('/add/:task', async (req, res) => {
+  const { task } = req.params;
   try {
     const result = await createTask(task);
     if (result.rowCount == 1) {
       res.status(201).send({
+        id: result.rows[0].id,
         status: 'success',
         message: 'task created',
       });
@@ -37,8 +38,15 @@ router.post('/:task', async (req, res) => {
 router.get('/', async (req, res) => {
   try {
     const result = await getAllTasks();
-    if (result.rowCount == 1) {
+    if (result.rowCount >= 1) {
       res.status(201).send({
+        tasks: result.rows,
+        status: 'success',
+        message: 'all Tasks',
+      });
+    } else {
+      res.status(201).send({
+        tasks: [],
         status: 'success',
         message: 'all Tasks',
       });
@@ -58,9 +66,9 @@ router.get('/', async (req, res) => {
  */
 
 router.get('/:id', async (req, res) => {
-  const { id } = req.query;
+  const { id } = req.params;
   try {
-    const result = await getTask();
+    const result = await getTask(id);
     if (result.rowCount == 1) {
       res.status(201).send({
         status: 'success',
@@ -79,11 +87,13 @@ router.get('/:id', async (req, res) => {
 /**
  * Update Task
  * @param id
+ * @body status
  */
-router.put('/:id', async (req, res) => {
-  const { id } = req.query;
+router.put('/update/:id', async (req, res) => {
+  const { id } = req.params;
+  const { status } = req.body;
   try {
-    const result = await setTask(id, status);
+    const result = await setTask(status, id);
     if (result.rowCount == 1) {
       res.status(201).send({
         status: 'success',
@@ -103,8 +113,8 @@ router.put('/:id', async (req, res) => {
  * DELETE Task
  * @param id
  */
-router.post('/:id', async (req, res) => {
-  const { id } = req.query;
+router.post('/delete/:id', async (req, res) => {
+  const { id } = req.params;
   try {
     const result = await deleteTask(id);
     if (result.rowCount == 1) {
