@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-
+import './AddTodo.css';
 function AddTodo({ createTodo }) {
   const [input, setInput] = useState('');
 
@@ -26,7 +26,7 @@ function AddTodo({ createTodo }) {
         name="task"
         placeholder="New Task"
       />
-      <button>Add Task</button>
+      <button className="addButton">Add Task</button>
     </form>
   );
 }

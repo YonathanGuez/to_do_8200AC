@@ -1,10 +1,16 @@
 .Todo {
   display: flex;
-  margin: 0 -3rem 4px;
-  padding: 1.1rem 3rem;
+  margin: 9px 0rem 9px;
+  padding: 0.1rem 1rem;
   justify-content: space-between;
   align-items: center;
   background: rgba(255, 255, 255, 0.1);
+}
+
+.TodoList ul {
+  margin-top: 2.6rem;
+  list-style: none;
+  padding-left: 0px;
 }
 
 .Todo-task {
@@ -94,8 +100,7 @@
 
 .buttonTrue {
   display: inline-block;
-  padding: 15px 25px;
-  font-size: 24px;
+  padding: 5px 12px;
   cursor: pointer;
   text-align: center;
   text-decoration: none;
@@ -109,8 +114,7 @@
 
 .buttonFalse {
   display: inline-block;
-  padding: 15px 25px;
-  font-size: 24px;
+  padding: 5px 12px;
   cursor: pointer;
   text-align: center;
   text-decoration: none;

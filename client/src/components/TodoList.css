@@ -6,6 +6,19 @@
   color: #fff;
   box-shadow: -20px -20px 0px 0px rgba(100, 100, 100, 0.1);
 }
+@media only screen and (max-width: 400px) {
+  .TodoList {
+    margin: 0rem auto;
+    padding: 2rem 3rem 3rem;
+    max-width: 500px;
+    background: #5774f5;
+    color: #fff;
+    box-shadow: -20px -20px 0px 0px rgba(100, 100, 100, 0.1);
+  }
+  body {
+    background: #5774f5;
+  }
+}
 
 .TodoList ul {
   margin-top: 2.6rem;
