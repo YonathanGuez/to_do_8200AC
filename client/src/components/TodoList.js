@@ -18,14 +18,14 @@ function TodoList() {
     }
   };
   const create = async (newTodo) => {
-    const url = process.env.REACT_APP_URL + '/api/client/add/' + newTodo.task;
+    const url = process.env.REACT_APP_URL + '/api/client/add/' + newTodo;
     const response = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
     });
     if (response.ok) {
       const json = await response.json();
-      let newtask = { id: json.id, task: newTodo.task, status: false };
+      let newtask = { id: json.id, task: newTodo, status: false };
       setTodos([...todos, newtask]);
     }
   };

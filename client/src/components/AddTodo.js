@@ -1,29 +1,25 @@
-import React, { useReducer } from 'react';
+import React, { useState } from 'react';
 
-function AddTodo({ task, createTodo }) {
-  const [userInput, setUserInput] = useReducer(
-    (state, newState) => ({ ...state, ...newState }),
-    {
-      task: '',
-    }
-  );
+function AddTodo({ createTodo }) {
+  const [input, setInput] = useState('');
 
   const handleChange = (e) => {
-    setUserInput({ [e.target.name]: e.target.value });
+    let val = e.target.value;
+    setInput(val);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const newTodo = { task: userInput.task };
-    createTodo(newTodo);
-    setUserInput({ task: '' });
+
+    createTodo(input);
+    setInput('');
   };
 
   return (
     <form className="NewTodoForm" onSubmit={handleSubmit}>
       {/* <label htmlFor="task">New Task</label> */}
       <input
-        value={userInput.task}
+        value={input}
         onChange={handleChange}
         id="task"
         type="text"

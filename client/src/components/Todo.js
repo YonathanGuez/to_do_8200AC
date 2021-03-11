@@ -18,6 +18,13 @@ function Todo({ todo, remove, toggleComplete }) {
         {todo.task}
       </li>
       <div className="Todo-buttons">
+        <button
+          id={todo.id}
+          className={todo.status ? 'buttonTrue' : 'buttonFalse'}
+          onClick={toggleCompleted}
+        >
+          {todo.status ? 'done' : 'undone'}
+        </button>
         <button onClick={handleRemove}>
           <i id={todo.id} className="fas fa-trash" />
         </button>
