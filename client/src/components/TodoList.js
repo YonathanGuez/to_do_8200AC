@@ -7,49 +7,66 @@ function TodoList() {
   const [todos, setTodos] = useState([]);
 
   const getAllTasks = async () => {
-    const url = process.env.REACT_APP_URL + '/api/client/';
-    const response = await fetch(url);
+    const url = '/api/client/';
     console.log(url);
-    if (response.ok) {
-      const json = await response.json();
-      setTodos(json.tasks);
-    } else {
-      console.log('bad request: ');
+    try {
+      const response = await fetch(url);
+      // console.log(url);
+      if (response.ok) {
+        const json = await response.json();
+        setTodos(json.tasks);
+      } else {
+        console.log('bad request: ');
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
   const create = async (newTodo) => {
-    const url = process.env.REACT_APP_URL + '/api/client/add/' + newTodo;
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-    });
-    if (response.ok) {
-      const json = await response.json();
-      let newtask = { id: json.id, task: newTodo, status: false };
-      setTodos([...todos, newtask]);
+    const url = '/api/client/add/' + newTodo;
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+      });
+      if (response.ok) {
+        const json = await response.json();
+        let newtask = { id: json.id, task: newTodo, status: false };
+        setTodos([...todos, newtask]);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
   const remove = async (key) => {
-    const url = process.env.REACT_APP_URL + '/api/client/delete/' + key;
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-    });
-    if (response.ok) {
-      getAllTasks();
+    const url = '/api/client/delete/' + key;
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+      });
+      if (response.ok) {
+        getAllTasks();
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
   const updateStatus = async (key, status) => {
-    const url = process.env.REACT_APP_URL + '/api/client/update/' + key;
-    const response = await fetch(url, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ status: status }),
-    });
-    if (response.ok) {
-      // const json = await response.json();
-      // console.log(json);
+    const url = '/api/client/update/' + key;
+    try {
+      const response = await fetch(url, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: status }),
+      });
+      if (response.ok) {
+        // const json = await response.json();
+        // console.log(json);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
   const toggleComplete = async (key) => {

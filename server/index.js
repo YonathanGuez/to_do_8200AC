@@ -4,7 +4,21 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const app = express();
 
-const allowedOrigins = ['http://localhost:3000'];
+const PORT = process.env.PORT || 4000;
+const HOST = process.env.HOST || '0.0.0.0';
+
+const allowedOrigins = [
+  'http://localhost:3000',
+  'http://192.168.99.100:3000',
+  'http://0.0.0.0:3000',
+  'http://web-app:3000',
+  'http://todo-api:4000',
+  'http://localhost:3000/',
+  'http://192.168.99.100:3000/',
+  'http://0.0.0.0:3000/',
+  'http://web-app:3000/',
+  'http://todo-api:4000/',
+];
 
 app.use(
   cors({
@@ -15,7 +29,8 @@ app.use(
       if (allowedOrigins.indexOf(origin) === -1) {
         var msg =
           'The CORS policy for this site does not ' +
-          'allow access from the specified Origin.';
+          'allow access from the specified Origin:' +
+          origin;
         return callback(new Error(msg), false);
       }
       return callback(null, true);
@@ -37,6 +52,6 @@ app.use(express.urlencoded({ extended: false }));
 // Routes/api/members.js => router
 app.use('/api/client', require('./routes/api/client'));
 //Start server
-app.listen(process.env.PORT, () => {
-  console.log(`Server listening : ` + process.env.PORT);
+app.listen(PORT, HOST, () => {
+  console.log(`Server listening : ` + HOST + ':' + PORT);
 });
