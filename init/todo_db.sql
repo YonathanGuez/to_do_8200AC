@@ -31,8 +31,8 @@ CREATE TABLE public.todo (
     id integer DEFAULT nextval('public.todo_seq'::regclass) NOT NULL,
     task character varying(250) NOT NULL,
     status boolean NOT NULL,
-    "createdAt" date NOT NULL,
-    "updateAt" date
+    "createdat" date NOT NULL,
+    "updateat" date
 );
 
 
