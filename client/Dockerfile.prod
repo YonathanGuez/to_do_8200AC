@@ -1,0 +1,10 @@
+# stage1 - build react app first 
+FROM node:12.16.1-alpine3.9 as build
+WORKDIR /app
+# A wildcard is used to ensure both package.json AND package-lock.json are copied
+COPY package.json yarn.lock ./
+RUN yarn --silent
+# Copy the contents of the project to the image
+COPY . .
+RUN yarn build
+

@@ -1,0 +1,43 @@
+version: '3'
+services:
+  postgres:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: todo
+    volumes:
+      - ./init/todo_db.sql:/docker-entrypoint-initdb.d/todo_db.sql
+    ports:
+      - '5432:5432'
+  web-app:
+    build:
+      context: ./client
+      dockerfile: Dockerfile.dev
+    volumes:
+      - /app/node_modules
+      - ./client:/app
+    ports:
+      - '3000:3000'
+    restart: on-failure
+    container_name: web-app
+    environment:
+      - REACT_APP_URL=http://todo-api:4000
+  todo-api:
+    build:
+      context: ./server
+      dockerfile: Dockerfile.dev
+    ports:
+      - '4000:4000'
+    depends_on:
+      - postgres
+    restart: on-failure
+    container_name: todo-api
+    volumes:
+      - /app/node_modules # Inside the container, don't try to override this folder, just leave as is
+      - ./server:/app # Look at the server directory and copy everything into the app folder in the container
+    environment:
+      - PORT=4000
+      - HOST=0.0.0.0
+      - DATABASE_URL="postgressql://postgres:postgres@postgres:5432/todo"

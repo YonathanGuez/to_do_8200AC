@@ -1,0 +1,20 @@
+{
+  "name": "export",
+  "version": "1.0.0",
+  "description": "export Postgress to CSV",
+  "main": "export-csv.js",
+  "license": "MIT",
+  "dependencies": {
+    "fast-csv": "^4.3.6",
+    "fs": "^0.0.1-security",
+    "mongodb": "^3.6.4",
+    "pg": "^8.5.1"
+  },
+  "scripts": {
+    "export": "node export-csv.js",
+    "import": "node import-csv-mongo.js"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}

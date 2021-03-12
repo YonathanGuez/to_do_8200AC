@@ -1,0 +1,14 @@
+# Specify a base image
+FROM node:12.13.0-alpine AS alpine
+WORKDIR /app
+# Install dependencies
+COPY package.json yarn.lock ./
+## install only the packages defined in the yarn.lock(faster than the normal npm install)
+RUN yarn
+# Copy the contents of the project to the image
+COPY . .
+# environement variable 
+ENV PORT=4000
+
+# Default command
+CMD ["npm", "start"]
