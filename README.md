@@ -10,9 +10,24 @@ Save the file and run Docker Compose from the same directory:
 docker-compose up -d
 ```
 
+## Check The WebSite :
+
+With Chrome of other Browser:
+
+```
+http://IP_DOCKER:3000
+```
+
+Example with Windows 10 :
+docker is configured to use the default machine with IP 192.168.99.100
+
+```
+http://192.168.99.100:3000
+```
+
 ## Debug Container:
 
-check Log:
+Check Log:
 
 ```
 docker logs <container_id> -f
