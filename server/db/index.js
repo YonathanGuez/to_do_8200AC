@@ -1,12 +1,18 @@
 const { Pool } = require('pg');
 
+const USER = process.env.PGUSER || 'postgres';
+const DATABASE = process.env.PGDATABASE || 'todo';
+const PASSWORD = process.env.PGPASSWORD || 'postgres';
+const HOST = process.env.PGHOST || 'postgres';
+const PORT = process.env.PGPORT || 5432;
+
 const pool = new Pool({
   // connectionString: process.env.DATABASE_URL,
-  user: 'postgres', //env var: PGUSER
-  database: 'todo', //env var: PGDATABASE
-  password: 'postgres', //env var: PGPASSWORD
-  host: 'postgres', // Server hosting the postgres database
-  port: 5432, //env var: PGPORT
+  user: USER,
+  database: DATABASE,
+  password: PASSWORD,
+  host: HOST,
+  port: PORT,
 });
 
 module.exports = {

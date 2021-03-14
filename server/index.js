@@ -7,36 +7,8 @@ const app = express();
 const PORT = process.env.PORT || 4000;
 const HOST = process.env.HOST || '0.0.0.0';
 
-const allowedOrigins = [
-  'http://localhost:3000',
-  'http://192.168.99.100:3000',
-  'http://0.0.0.0:3000',
-  'http://web-app:3000',
-  'http://todo-api:4000',
-  'http://localhost:3000/',
-  'http://192.168.99.100:3000/',
-  'http://0.0.0.0:3000/',
-  'http://web-app:3000/',
-  'http://todo-api:4000/',
-];
-
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      // allow requests with no origin
-      // (like mobile apps or curl requests)
-      if (!origin) return callback(null, true);
-      if (allowedOrigins.indexOf(origin) === -1) {
-        var msg =
-          'The CORS policy for this site does not ' +
-          'allow access from the specified Origin:' +
-          origin;
-        return callback(new Error(msg), false);
-      }
-      return callback(null, true);
-    },
-  })
-);
+//accept allCors from any IP
+app.use(cors());
 
 const logger = (req, res, next) => {
   console.log(`${req.protocol}://${req.get('host')}${req.originalUrl}`);

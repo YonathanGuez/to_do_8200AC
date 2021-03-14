@@ -2,7 +2,14 @@
 
 Fullstack Development Exercise
 
-## Install the working version:
+
+## Install PRODUCTION PostgreSQL React Node and Nginx:
+
+```
+docker-compose -f docker-compose.prod.yml up
+```
+
+## Install DEVELOPMENT PostgreSQL React Node :
 
 Save the file and run Docker Compose from the same directory:
 
@@ -82,8 +89,3 @@ We need to build a cron for this step that will do it X time
 docker-compose -f docker-compose.dev.yml up
 ```
 
-## PRODUCTION Still Building :
-
-```
-docker-compose -f docker-compose.prod.yml up
-```
