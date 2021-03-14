@@ -6,7 +6,5 @@ COPY package.json yarn.lock ./
 RUN yarn
 # Copy the contents of the project to the image
 COPY . .
-# environement variable 
-ENV REACT_APP_URL=http://127.0.0.1:4000
 # Run 'npm start' when the container starts.
 CMD ["npm", "run", "start"]

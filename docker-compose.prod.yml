@@ -17,8 +17,6 @@ services:
       dockerfile: Dockerfile.prod
     restart: on-failure
     container_name: web-app
-    environment:
-      - REACT_APP_URL=http://todo-api:4000
     ports:
       - '80:80'
   todo-api:
