@@ -2,8 +2,7 @@ const fs = require('fs');
 const mongodb = require('mongodb').MongoClient;
 const fastcsv = require('fast-csv');
 
-// let url = "mongodb://username:password@localhost:27017/";
-let url = 'mongodb://localhost:27017/';
+let url = 'mongodb://root:rootpwd@mongodb:27017/';
 let stream = fs.createReadStream('todolist.csv');
 let csvData = [];
 let csvStream = fastcsv
@@ -29,7 +28,7 @@ let csvStream = fastcsv
         if (err) throw err;
 
         client
-          .db('todo_db')
+          .db('todo')
           .collection('category')
           .insertMany(csvData, (err, res) => {
             if (err) throw err;
@@ -40,3 +39,5 @@ let csvStream = fastcsv
       }
     );
   });
+
+stream.pipe(csvStream);

@@ -1,5 +1,5 @@
 # Specify a base image
-FROM node:12.13.0-alpine AS alpine
+FROM node:12.16.1-alpine3.9 AS alpine
 WORKDIR /app
 # Install dependencies
 COPY package.json yarn.lock ./

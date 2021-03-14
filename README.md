@@ -59,6 +59,18 @@ Remove all volume:
 docker volume rm $(docker volume ls -q)
 ```
 
+Build Test Dockerfile.prod only:
+
+```
+docker build -f Dockerfile.prod -t test .
+```
+
+Run Test Dockerfile.prod only:
+
+```
+docker run -d --name test1 -p 80:80 test
+```
+
 ## Backup Mongodb Still Building :
 
 For this step i think to export my data in CSV
