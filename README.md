@@ -2,6 +2,11 @@
 
 Fullstack Development Exercise
 
+Docker-Compose (DEV and PROD) Full-Stack App ReactJS / NodeJS / PostgreSQL: 
+In this project i build a simple website TODOLIST in ReactJS with a server Nodejs and Database PostgresSQL
+
+I build some docker-compose for Development and Production
+(I add in production a Proxy server Nginx and Database Mongodb in Backup )
 
 ## Install PRODUCTION PostgreSQL React Node Nginx and Backup MongoDB:
 
