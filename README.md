@@ -3,7 +3,7 @@
 Fullstack Development Exercise
 
 
-## Install PRODUCTION PostgreSQL React Node and Nginx:
+## Install PRODUCTION PostgreSQL React Node Nginx and Backup MongoDB:
 
 ```
 docker-compose -f docker-compose.prod.yml up
@@ -83,12 +83,12 @@ Enter in my container:
 docker exec -it  mycron
 ```
 
-## Backup Mongodb Still Building :
+## Dev: With Backup Mongodb :
 
 For this step i think to export my data in CSV
 and after that import the CSV to MONGODB
 
-We need to build a cron for this step that will do it X time
+We need to build a cron for this step that will do it each minute
 
 ```
 docker-compose -f docker-compose.dev.yml up

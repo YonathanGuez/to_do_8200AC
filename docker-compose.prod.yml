@@ -40,3 +40,31 @@ services:
       - PGPASSWORD=postgres
       - PGHOST=postgres
       - PGPORT=5432
+  mongo:
+    container_name: mongo
+    image: mongo
+    ports:
+      - '27017:27017'
+    volumes:
+      - /data/db
+  backup:
+    build:
+      context: ./backup
+      dockerfile: Dockerfile
+    volumes:
+      - /root/node_modules
+      - ./backup:/root
+    ports:
+      - '5000:5000'
+    restart: on-failure
+    container_name: backup
+    depends_on:
+      - postgres
+      - mongo
+    environment:
+      - PGUSER=postgres
+      - PGDATABASE=todo
+      - PGPASSWORD=postgres
+      - PGHOST=postgres
+      - PGPORT=5432
+

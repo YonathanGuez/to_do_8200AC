@@ -39,16 +39,30 @@ services:
       - PORT=4000
       - HOST=0.0.0.0
       - DATABASE_URL="postgressql://postgres:postgres@postgres:5432/todo"
-  mongodb:
-    image: mongo:latest
-    restart: always
-    container_name: mongodb
-    hostname: mongodb
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: rootpwd
-      MONGO_INITDB_DATABASE: todo
+  mongo:
+    container_name: mongo
+    image: mongo
     ports:
-      - 27017:27017
+      - '27017:27017'
     volumes:
-      - mongodb_data_container:/data/db
+      - /data/db
+  backup:
+    build:
+      context: ./backup
+      dockerfile: Dockerfile
+    volumes:
+      - /root/node_modules
+      - ./backup:/root
+    ports:
+      - '5000:5000'
+    restart: on-failure
+    container_name: backup
+    depends_on:
+      - postgres
+      - mongo
+    environment:
+      - PGUSER=postgres
+      - PGDATABASE=todo
+      - PGPASSWORD=postgres
+      - PGHOST=postgres
+      - PGPORT=5432
