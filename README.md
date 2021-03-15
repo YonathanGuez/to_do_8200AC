@@ -78,6 +78,11 @@ Run Test Dockerfile.prod only:
 docker run -d --name test1 -p 80:80 test
 ```
 
+Enter in my container:
+```
+docker exec -it  mycron
+```
+
 ## Backup Mongodb Still Building :
 
 For this step i think to export my data in CSV
@@ -89,3 +94,12 @@ We need to build a cron for this step that will do it X time
 docker-compose -f docker-compose.dev.yml up
 ```
 
+### Build Cron in Docker: 
+/backup:
+```
+docker build -t cron .
+``` 
+run and check logs in same time :
+```
+docker run -it --name cron cron 
+```

@@ -3,13 +3,19 @@ const fastcsv = require('fast-csv');
 const fs = require('fs');
 const ws = fs.createWriteStream('todolist.csv');
 
+const USER = process.env.PGUSER || 'postgres';
+const DATABASE = process.env.PGDATABASE || 'todo';
+const PASSWORD = process.env.PGPASSWORD || 'postgres';
+const HOST = process.env.PGHOST || 'postgres';
+const PORT = process.env.PGPORT || 5432;
+
 // Create a connection to the database
 const pool = new Pool({
-  user: 'postgres', //env var: PGUSER
-  database: 'todo', //env var: PGDATABASE
-  password: 'postgres', //env var: PGPASSWORD
-  host: 'postgres', // Server hosting the postgres database
-  port: 5432, //env var: PGPORT
+  user: USER,
+  database: DATABASE,
+  password: PASSWORD,
+  host: HOST,
+  port: PORT,
 });
 
 // open the PostgreSQL connection
