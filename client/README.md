@@ -2,34 +2,64 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Build The image :
+Production with config nginx client+server:
+```
+docker build -t to_do_8200ac-web-app -f Dockerfile.prod .
+```
+
+Production with config nginx only client:
+```
+docker build -t to_do_8200ac-web-app -f Dockerfile.prod.only-client .
+```
 ## Deployment with Kubernetes:
 
-In the project directory, you can run:
+We use A private Docker Register for this project :
 
-### Create Namespace we need it in our Yaml
-
+### 1) Push the image in the private Register 
 ```
-kubectl create namespace <namespace name>
+docker tag to_do_8200ac-web-app:latest localhost:5000/to_do_8200ac-web-app:latest
+docker push localhost:5000/to_do_8200ac-web-app:latest
 ```
-
-Both are very different approaches. The kubectl create uses imperative Management. In Kubectl create you specify what you want to create, delete or replace.
-
-While the kubectl apply uses Declarative approach. Where we tell the api how our cluster should look like. So your changes will be maintained even if you've applied changes to a live object.
-
-check :
-
+### 2) Deploy with kubernetes:
 ```
-kubectl get namespace <namespace name>
+kubectl apply  -f deployment.yaml
 ```
-
-#### Enregistre de manière permanente le namespace pour toutes les commandes kubectl suivantes dans ce contexte
-
+TEST APP:
+1- option check if the deployment work :
 ```
-kubectl config set-context --current --namespace=test
+ kubectl describe  deployments create-react-app
 ```
+result :
+NewReplicaSet:   create-react-app-5cc96c594 (1/1 replicas created)
 
-for me the namespace is test and the customer name is 8200-react-app
-
+2- check the pod :
 ```
-delete namespace kubectl delete namespace test
+kubectl describe pod create-react-app-5cc96c594
+```
+result :
+```
+Events:
+  Type    Reason     Age   From               Message
+  ----    ------     ----  ----               -------
+  Normal  Scheduled  86s   default-scheduler  Successfully assigned default/create-react-app-5cc96c594 to docker-desktop
+  Normal  Pulling    85s   kubelet            Pulling image "localhost:5000/to_do_8200ac-web-app:latest"
+  Normal  Pulled     85s   kubelet            Successfully pulled image "localhost:5000/to_do_8200ac-web-app:latest" in 125.6906ms
+  Normal  Created    85s   kubelet            Created container create-react-app
+  Normal  Started    85s   kubelet            Started container create-react-app
+```
+3- Check the service :
+```
+kubectl get service create-react-app
+```
+result :
+```
+NAME               TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
+create-react-app   NodePort   10.100.253.81   <none>        80:31000/TCP   9m40s
+```
+go to http://localhost:31000/ and check if the site is up  "<h1>Todo List</h1>"
+
+### 3) Delete the deploy:
+```
+kubectl delete  -f deployment.yaml
 ```
