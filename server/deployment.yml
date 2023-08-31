@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: create-todo-api
+  labels:
+    app: create-todo-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: create-todo-api
+  template:
+    metadata:
+      labels:
+        app: create-todo-api
+    spec:
+      containers:
+      - name: create-todo-api
+        image: localhost:5000/to_do_8200ac-todo-api:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 1337
+        env:
+        - name: PGUSER
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+              key: postgres-user
+        - name: PGPASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+              key: postgres-password
+        - name: PGHOST
+          valueFrom:
+            configMapKeyRef:
+              name: postgres-configmap
+              key: postgres-host
+        - name: PGDATABASE
+          valueFrom:
+            configMapKeyRef:
+              name: postgres-configmap
+              key: postgres-dbname
+        volumeMounts:
+        # The volume mounts  for the container
+        - mountPath: /var/lib/postgres/data
+          name: db-data
+      # Volumes attached to the pod
+      volumes:
+      - name: db-data
+        persistentVolumeClaim:
+          claimName: postgresql-pvc
+      imagePullSecrets:
+      - name: regcred
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: create-todo-api-service
+spec:
+  selector:
+    app: create-todo-api
+  type: LoadBalancer
+  ports:
+  - protocol: TCP
+    port: 1337
+    targetPort: 1337
+    nodePort: 4000
