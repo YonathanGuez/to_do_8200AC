@@ -19,37 +19,21 @@ spec:
         image: localhost:5000/to_do_8200ac-todo-api:latest
         imagePullPolicy: Always
         ports:
-        - containerPort: 1337
+        - containerPort: 4000
         env:
         - name: PGUSER
-          valueFrom:
-            secretKeyRef:
-              name: postgres-secret
-              key: postgres-user
+          value: postgres
         - name: PGPASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: postgres-secret
-              key: postgres-password
+          value: postgres
         - name: PGHOST
-          valueFrom:
-            configMapKeyRef:
-              name: postgres-configmap
-              key: postgres-host
+          value: postgres-service
+        - name: PGPORT
+          value: '5432'
         - name: PGDATABASE
           valueFrom:
             configMapKeyRef:
               name: postgres-configmap
               key: postgres-dbname
-        volumeMounts:
-        # The volume mounts  for the container
-        - mountPath: /var/lib/postgres/data
-          name: db-data
-      # Volumes attached to the pod
-      volumes:
-      - name: db-data
-        persistentVolumeClaim:
-          claimName: postgresql-pvc
       imagePullSecrets:
       - name: regcred
 ---
@@ -63,6 +47,6 @@ spec:
   type: LoadBalancer
   ports:
   - protocol: TCP
-    port: 1337
-    targetPort: 1337
-    nodePort: 4000
+    port: 4000
+    targetPort: 4000
+    nodePort: 30000

@@ -29,3 +29,9 @@ data:
 ```
 
 ## Deployment Node:
+```
+kubectl apply -f postgress-deployment.yml 
+```
+```
+kubectl exec -it postgres-7d9bd474cb-ztwvj --  psql -h localhost -U postgres --password postgres -p 5432 postgres
+```

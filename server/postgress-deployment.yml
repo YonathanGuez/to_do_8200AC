@@ -1,12 +1,12 @@
-apiVersion: v1
-kind: Secret
-metadata:
-  name: postgres-secret
-type: Opaque
-data:
-  postgres-user: cG9zdGdyZXNxbA==
-  postgres-password: dG9wc2VjdXJl
----
+# apiVersion: v1
+# kind: Secret
+# metadata:
+#   name: postgres-secret
+# type: Opaque
+# data:
+#   postgres-user: postgres
+#   postgres-password: postgres
+# ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -22,13 +22,13 @@ metadata:
   labels:
     type: local
 spec:
-  storageClassName: manual
+  storageClassName: hostpath
   capacity:
     storage: 1Gi
   accessModes:
   - ReadWriteOnce
   hostPath:
-    path: "C:\\Users\\yaniv\\Documents\\project-yoni\\to_do_8200AC\\init"
+    path: "/run/desktop/mnt/host/c/tmp/"
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -63,20 +63,26 @@ spec:
       containers:
       - name: postgres
         image: postgres:latest
+        lifecycle:
+          postStart:
+            exec:
+              command: ["/bin/sh", "-c", "sleep 20 &&  psql -U $POSTGRES_USER -c  'create database todo;'"]
         ports:
         - containerPort: 80
         env:
         - name: POSTGRES_USER
-          valueFrom:
-            secretKeyRef:
-              name: postgres-secret
-              key: postgres-user
+          value: postgres
+          # valueFrom:
         - name: POSTGRES_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: postgres-secret
-              key: postgres-password
+          #   secretKeyRef:
+          #     name: postgres-secret
+          #     key: postgres-user
+          value: postgres
+          # valueFrom:
         - name: POSTGRES_HOST
+          #   secretKeyRef:
+          #     name: postgres-secret
+          #     key: postgres-password
           valueFrom:
             configMapKeyRef:
               name: postgres-configmap
@@ -86,6 +92,13 @@ spec:
             configMapKeyRef:
               name: postgres-configmap
               key: postgres-dbname
+        volumeMounts:
+        - mountPath: /var/lib/postgresql/data
+          name: postgresdata
+      volumes:
+      - name: postgresdata
+        persistentVolumeClaim:
+          claimName: postgresql-pvc
 ---
 apiVersion: v1
 kind: Service
