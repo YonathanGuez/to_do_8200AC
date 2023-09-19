@@ -44,6 +44,35 @@ spec:
     requests:
       storage: 100Mi
 ---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: postgresql-pv2
+  labels:
+    type: local
+spec:
+  storageClassName: hostpath
+  capacity:
+    storage: 50Mi
+  accessModes:
+  - ReadWriteOnce
+  hostPath:
+    path: "/run/desktop/mnt/host/c/Users/yaniv/Documents/project-yoni/to_do_8200AC/init/"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgresql-pvc2
+  labels:
+    app: postgresql
+    tier: database
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Mi
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -63,10 +92,10 @@ spec:
       containers:
       - name: postgres
         image: postgres:latest
-        lifecycle:
-          postStart:
-            exec:
-              command: ["/bin/sh", "-c", "sleep 20 &&  psql -U $POSTGRES_USER -c  'create database todo;'"]
+        # lifecycle:
+        #   postStart:
+        #     exec:
+        #       command: ["/bin/sh", "-c", "sleep 20 && cd /tmp &&  psql -U $POSTGRES_USER -f todo_db.sql"]
         ports:
         - containerPort: 80
         env:
@@ -95,10 +124,15 @@ spec:
         volumeMounts:
         - mountPath: /var/lib/postgresql/data
           name: postgresdata
+        - mountPath: /tmp
+          name: datasql
       volumes:
       - name: postgresdata
         persistentVolumeClaim:
           claimName: postgresql-pvc
+      - name: datasql
+        persistentVolumeClaim:
+          claimName: postgresql-pvc2
 ---
 apiVersion: v1
 kind: Service

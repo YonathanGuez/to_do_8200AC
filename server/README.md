@@ -26,9 +26,10 @@ docker push localhost:5000/to_do_8200ac-todo-api:latest
 Work with postgres :
 
 ```
-kubectl apply -f postgress-deployment.yaml
-kubectl apply -f deployment.yaml
+kubectl apply -f postgress-deployment.yml
+kubectl apply -f deployment.yml
 ```
+
 
 test if  create-todo-api working :
 ```
@@ -36,3 +37,11 @@ curl http://localhost:4000/api/client
 ```
 return :
 {"status":"fail","message":"fail get all tasks"}
+
+tail log kubectl :
+```
+kubectl logs pod/create-todo-api-7977bf85b7-svchc -f
+```
+
+
+psql -U postgres -f /tmp/todo_db.sql
