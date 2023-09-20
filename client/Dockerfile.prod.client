@@ -1,9 +1,10 @@
 # Stage1 - build react app first 
-FROM node:12.16.1-alpine3.9 as build
+FROM node:14.15.0 as build
 WORKDIR /app
-COPY package.json yarn.lock ./
+COPY package.json  ./
 RUN yarn install
 COPY . .
+RUN npx browserslist@latest --update-db
 RUN yarn build
 
 #Stage2 - build Nginx Proxy server 

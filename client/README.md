@@ -3,7 +3,7 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Build The image :
-Production with config nginx client+server:
+Production with config nginx client+server for docker-compose:
 ```
 docker build -t to_do_8200ac-web-app -f Dockerfile.prod .
 ```

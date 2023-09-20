@@ -108,3 +108,10 @@ run and check logs in same time :
 ```
 docker run -it --name cron cron 
 ```
+
+### Test Production with docker-compose
+
+we use environment variable for nginx : 
+```
+docker-compose -f docker-compose.prod.nginx.yml up
+```

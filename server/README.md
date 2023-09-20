@@ -43,5 +43,8 @@ tail log kubectl :
 kubectl logs pod/create-todo-api-7977bf85b7-svchc -f
 ```
 
+## Run script build DB in POD postgres :
 
-psql -U postgres -f /tmp/todo_db.sql
+```
+psql -U postgres todo -f /tmp/todo_db.sql
+```

@@ -5,9 +5,11 @@ import './TodoList.css';
 
 function TodoList() {
   const [todos, setTodos] = useState([]);
-
+  let API=process.env.REACT_APP_API_HOST || 'localhost'
+  let port_api= process.env.REACT_APP_API_PORT || 4000
+  let url_api='http://'+API+':'+port_api
   const getAllTasks = async () => {
-    const url = '/api/client/';
+    const url = url_api+'/api/client/';
     console.log(url);
     try {
       const response = await fetch(url);
@@ -23,7 +25,7 @@ function TodoList() {
     }
   };
   const create = async (newTodo) => {
-    const url = '/api/client/add/' + newTodo;
+    const url = url_api+'/api/client/add/' + newTodo;
     try {
       const response = await fetch(url, {
         method: 'POST',
@@ -40,7 +42,7 @@ function TodoList() {
   };
 
   const remove = async (key) => {
-    const url = '/api/client/delete/' + key;
+    const url = url_api+'/api/client/delete/' + key;
     try {
       const response = await fetch(url, {
         method: 'POST',
@@ -54,7 +56,7 @@ function TodoList() {
     }
   };
   const updateStatus = async (key, status) => {
-    const url = '/api/client/update/' + key;
+    const url = url_api+'/api/client/update/' + key;
     try {
       const response = await fetch(url, {
         method: 'PUT',

@@ -92,35 +92,24 @@ spec:
       containers:
       - name: postgres
         image: postgres:latest
-        # lifecycle:
-        #   postStart:
-        #     exec:
-        #       command: ["/bin/sh", "-c", "sleep 20 && cd /tmp &&  psql -U $POSTGRES_USER -f todo_db.sql"]
+        lifecycle:
+          postStart:
+            exec:
+              command: ["/bin/sh", "-c", "sleep 44 && psql -U postgres todo -f /tmp/test-prod.sql"]
         ports:
         - containerPort: 80
         env:
+        - name: POSTGRES_DB
+          value: todo
         - name: POSTGRES_USER
           value: postgres
-          # valueFrom:
         - name: POSTGRES_PASSWORD
-          #   secretKeyRef:
-          #     name: postgres-secret
-          #     key: postgres-user
           value: postgres
-          # valueFrom:
         - name: POSTGRES_HOST
-          #   secretKeyRef:
-          #     name: postgres-secret
-          #     key: postgres-password
           valueFrom:
             configMapKeyRef:
               name: postgres-configmap
               key: postgres-host
-        - name: POSTGRES_DBNAME
-          valueFrom:
-            configMapKeyRef:
-              name: postgres-configmap
-              key: postgres-dbname
         volumeMounts:
         - mountPath: /var/lib/postgresql/data
           name: postgresdata
