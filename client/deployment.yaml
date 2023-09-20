@@ -13,16 +13,16 @@ spec:
         app: create-react-app
     spec:
       containers:
-      - name: create-react-app
-        image: localhost:5000/to_do_8200ac-web-app:latest
-        env:
-        # FOR NEXUS CONFIGURATION API 
-        - name: API_TEST
-          value: '10.100.116.32'
-        - name: API_PORT
-          value: '4000'
-        ports:
-        - containerPort: 80
+        - name: create-react-app
+          image: localhost:5000/to_do_8200ac-web-app:latest
+          env:
+            # FOR NEXUS CONFIGURATION API
+            - name: API_TEST
+              value: '10.100.116.32'
+            - name: API_PORT
+              value: '4000'
+          ports:
+            - containerPort: 80
 ---
 apiVersion: v1
 kind: Service
@@ -33,7 +33,7 @@ spec:
   selector:
     app: create-react-app
   ports:
-  - port: 80
-    protocol: TCP
-    targetPort: 80
-    nodePort: 31000
+    - port: 80
+      protocol: TCP
+      targetPort: 80
+      nodePort: 31000
