@@ -10,7 +10,12 @@ docker build -t to_do_8200ac-web-app -f Dockerfile.prod .
 
 Production with config nginx only client:
 ```
-docker build -t to_do_8200ac-web-app -f Dockerfile.prod.only-client .
+docker build -t to_do_8200ac-web-app -f Dockerfile.prod.client .
+```
+
+Production with config nginx client server :
+```
+docker build -t to_do_8200ac-web-app -f Dockerfile.prod.client.server .
 ```
 ## Deployment with Kubernetes:
 
