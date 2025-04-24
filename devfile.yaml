@@ -26,17 +26,3 @@ components:
         - name: postgres
           targetPort: 5432
           exposure: none
-  - name: docker-socket-volume
-    volume: {}
-  - name: image-build
-    container:
-      image: registry.access.redhat.com/ubi8/nodejs-16 # Or a suitable base image for building
-      memoryLimit: 1024Mi
-      command: ["/bin/bash", "-c"]
-      args:
-        - |
-          echo "Building Docker image..."
-          docker build -f client/Dockerfile.dev -t client:latest client
-      volumeMounts:
-        - name: docker-socket-volume
-          path: /var/run/docker.sock
