@@ -1,6 +1,11 @@
 schemaVersion: 2.2.0
 metadata:
   name: my-fullstack-app
+  attributes:
+    vscode:
+      extensions:
+        - esbenp.prettier-vscode # Prettier
+        - ms-azuretools.vscode-docker # Docker
 components:
   - name: postgres
     container:
