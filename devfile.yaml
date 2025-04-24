@@ -1,28 +1,67 @@
 schemaVersion: 2.1.0
 metadata:
-  name: mydevfile
+  name: nodejs
+  displayName: Node.js Runtime
+  description: Node.js 16 application
   tags:
     - Node.js
-    - React
-projects:
-  - name: my-go-project
-    clonePath: go/src/github.com/YonathanGuez/to_do_8200AC
+    - Express
+  projectType: Node.js
+  language: JavaScript
+  version: 2.1.1
+starterProjects:
+  - name: nodejs-starter
     git:
+      checkoutFrom:
+        revision: main
       remotes:
         origin: "https://github.com/YonathanGuez/to_do_8200AC.git"
 components:
-  - name: postgres
+  - name: runtime
     container:
-      image: postgres:latest
-      memoryLimit: 512Mi
+      image: registry.access.redhat.com/ubi8/nodejs-16:latest
+      args: ['tail', '-f', '/dev/null']
+      memoryLimit: 1024Mi
+      mountSources: true
       env:
-        - name: postgres_user
-          value: postgres
-        - name: postgres_password
-          value: postgres
-        - name: postgres_db
-          value: todo
+        - name: DEBUG_PORT
+          value: '5858'
       endpoints:
-        - name: postgres
-          targetPort: 5432
-          exposure: none
+        - name: http-node
+          targetPort: 3000
+        - exposure: none
+          name: debug
+          targetPort: 5858
+commands:
+  - id: install
+    exec:
+      component: runtime
+      commandLine: npm install
+      workingDir: ${PROJECT_SOURCE}
+      group:
+        kind: build
+        isDefault: true
+  - id: run
+    exec:
+      component: runtime
+      commandLine: npm start
+      workingDir: ${PROJECT_SOURCE}
+      group:
+        kind: run
+        isDefault: true
+  - id: debug
+    exec:
+      component: runtime
+      commandLine: npm run debug
+      workingDir: ${PROJECT_SOURCE}
+      group:
+        kind: debug
+        isDefault: true
+  - id: test
+    exec:
+      component: runtime
+      commandLine: npm test
+      workingDir: ${PROJECT_SOURCE}
+      group:
+        kind: test
+        isDefault: true
