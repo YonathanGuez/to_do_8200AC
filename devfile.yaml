@@ -1,0 +1,145 @@
+schemaVersion: 2.2.0
+metadata:
+  name: my-fullstack-app
+components:
+  - name: postgres
+    container:
+      image: postgres:latest
+      env:
+        - name: POSTGRES_USER
+          value: postgres
+        - name: POSTGRES_PASSWORD
+          value: postgres
+        - name: POSTGRES_DB
+          value: todo
+      ports:
+        - name: postgres-port
+          containerPort: 5432
+      volumes:
+        - name: postgres-init-scripts
+          containerPath: /docker-entrypoint-initdb.d
+          source: ./init
+  - name: web-app
+    build:
+      dockerfile: client/Dockerfile.dev
+      context: ./client
+    deploy:
+      kubernetes:
+        manifest: |
+          apiVersion: apps/v1
+          kind: Deployment
+          metadata:
+            name: web-app-deployment
+          spec:
+            # Load deployment configuration from client/deployment.yaml
+            $include: client/deployment.yaml
+    ports:
+      - name: web-app-port
+        containerPort: 3000
+    volumes:
+      - name: web-app-node-modules
+        containerPath: /app/node_modules
+      - name: web-app-source
+        containerPath: /app
+        source: ./client
+  - name: todo-api
+    build:
+      dockerfile: server/Dockerfile.dev
+      context: ./server
+    deploy:
+      kubernetes:
+        manifest: |
+          apiVersion: apps/v1
+          kind: Deployment
+          metadata:
+            name: todo-api-deployment
+          spec:
+            # Load deployment configuration from server/deployment.yaml
+            $include: server/deployment.yaml
+    ports:
+      - name: todo-api-port
+        containerPort: 4000
+    volumes:
+      - name: todo-api-node-modules
+        containerPath: /app/node_modules
+      - name: todo-api-source
+        containerPath: /app
+        source: ./server
+    env:
+      - name: PORT
+        value: "4000"
+      - name: HOST
+        value: 0.0.0.0
+      - name: DATABASE_URL
+        value: "postgresql://postgres:postgres@postgres:5432/todo"
+    dependsOn:
+      - postgres
+  - name: mongo
+    container:
+      image: mongo
+      ports:
+        - name: mongo-port
+          containerPort: 27017
+      volumes:
+        - name: mongo-data
+          containerPath: /data/db
+  - name: backup
+    build:
+      dockerfile: backup/Dockerfile
+      context: ./backup
+    ports:
+      - name: backup-port
+        containerPort: 5000
+    volumes:
+      - name: backup-node-modules
+        containerPath: /root/node_modules
+      - name: backup-source
+        containerPath: /root
+        source: ./backup
+    dependsOn:
+      - postgres
+      - mongo
+    env:
+      - name: PGUSER
+        value: postgres
+      - name: PGDATABASE
+        value: todo
+      - name: PGPASSWORD
+        value: postgres
+      - name: PGHOST
+        value: postgres
+      - name: PGPORT
+        value: "5432"
+commands:
+  - id: web-app-install
+    exec:
+      component: web-app
+      commandLine: npm install
+      workingDir: /app
+  - id: web-app-start
+    exec:
+      component: web-app
+      commandLine: npm start
+      workingDir: /app
+      hotReloadCapable: true
+  - id: todo-api-install
+    exec:
+      component: todo-api
+      commandLine: npm install
+      workingDir: /app
+  - id: todo-api-start
+    exec:
+      component: todo-api
+      commandLine: npm run dev # Or your start script
+      workingDir: /app
+      hotReloadCapable: true
+  - id: backup-install
+    exec:
+      component: backup
+      commandLine: npm install
+      workingDir: /root
+  - id: backup-start
+    exec:
+      component: backup
+      commandLine: node backup.js # Adjust if your start command is different
+      workingDir: /root
