@@ -26,19 +26,18 @@ components:
         - name: postgres
           targetPort: 5432
           exposure: none
+  - name: docker-socket-volume
+    volume: {}
   - name: image-build
     container:
       image: registry.access.redhat.com/ubi8/nodejs-16 # Or a suitable base image for building
       memoryLimit: 1024Mi
-      volumes:
-        - name: docker-socket
-          containerPath: /var/run/docker.sock
       command: ["/bin/bash", "-c"]
       args:
         - |
           echo "Building Docker image..."
           docker build -f client/Dockerfile.dev -t client:latest client
-      privileged: true # Required to access the Docker socket
-mounts:
-  - name: docker-socket
-    volume: {}
+      volumeMounts:
+        - name: docker-socket-volume
+          mountPath: /var/run/docker.sock
+      privileged: true # This might still cause issues in 2.1.0, let's see
