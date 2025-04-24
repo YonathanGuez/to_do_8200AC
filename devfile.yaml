@@ -9,13 +9,6 @@ metadata:
   projectType: Node.js
   language: JavaScript
   version: 2.1.1
-starterProjects:
-  - name: nodejs-starter
-    git:
-      checkoutFrom:
-        revision: main
-      remotes:
-        origin: "https://github.com/YonathanGuez/to_do_8200AC.git"
 components:
   - name: runtime
     container:
@@ -37,7 +30,7 @@ commands:
     exec:
       component: runtime
       commandLine: npm install
-      workingDir: ${PROJECT_SOURCE}
+      workingDir: ${PROJECT_SOURCE}/server
       group:
         kind: build
         isDefault: true
@@ -45,7 +38,7 @@ commands:
     exec:
       component: runtime
       commandLine: npm start
-      workingDir: ${PROJECT_SOURCE}
+      workingDir: ${PROJECT_SOURCE}/server
       group:
         kind: run
         isDefault: true
@@ -53,7 +46,7 @@ commands:
     exec:
       component: runtime
       commandLine: npm run debug
-      workingDir: ${PROJECT_SOURCE}
+      workingDir: ${PROJECT_SOURCE}/server
       group:
         kind: debug
         isDefault: true
@@ -61,7 +54,7 @@ commands:
     exec:
       component: runtime
       commandLine: npm test
-      workingDir: ${PROJECT_SOURCE}
+      workingDir: ${PROJECT_SOURCE}/server
       group:
         kind: test
         isDefault: true
