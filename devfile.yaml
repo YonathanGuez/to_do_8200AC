@@ -1,15 +1,15 @@
 schemaVersion: 2.1.0
 metadata:
   name: mydevfile
+  tags:
+    - Node.js
+    - React
 projects:
   - name: my-go-project
     clonePath: go/src/github.com/YonathanGuez/to_do_8200AC
     git:
       remotes:
         origin: "https://github.com/YonathanGuez/to_do_8200AC.git"
-    tags:
-      - Node.js
-      - React
 components:
   - name: postgres
     container:
@@ -27,9 +27,18 @@ components:
           targetPort: 5432
           exposure: none
   - name: image-build
-    image:
-      imageName: 'client:latest'
-      dockerfile:
-        uri: client/Dockerfile.dev
-        buildContext: .
-        rootRequired: false
+    container:
+      image: registry.access.redhat.com/ubi8/nodejs-16 # Or a suitable base image for building
+      memoryLimit: 1024Mi
+      volumes:
+        - name: docker-socket
+          containerPath: /var/run/docker.sock
+      command: ["/bin/bash", "-c"]
+      args:
+        - |
+          echo "Building Docker image..."
+          docker build -f client/Dockerfile.dev -t client:latest client
+      privileged: true # Required to access the Docker socket
+mounts:
+  - name: docker-socket
+    volume: {}
