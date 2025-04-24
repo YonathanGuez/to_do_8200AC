@@ -39,5 +39,4 @@ components:
           docker build -f client/Dockerfile.dev -t client:latest client
       volumeMounts:
         - name: docker-socket-volume
-          mountPath: /var/run/docker.sock
-      privileged: true # This might still cause issues in 2.1.0, let's see
+          path: /var/run/docker.sock
